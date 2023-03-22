@@ -60,7 +60,8 @@ class BookingDialog(CancelAndHelpDialog):
     # ==== Origine ==== # 
     async def origin_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for origin city."""
-        self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        #self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        self.chat_history["chat_request"] = step_context.context.activity.text
 
         booking_details = step_context.options
         print('booking_details : ', booking_details)
@@ -76,7 +77,8 @@ class BookingDialog(CancelAndHelpDialog):
     # ==== Destination ==== # 
     async def destination_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for destination city."""
-        self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        #self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        self.chat_history["chat_request"] = step_context.context.activity.text
 
         booking_details = step_context.options
 
@@ -95,7 +97,8 @@ class BookingDialog(CancelAndHelpDialog):
     async def start_date_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for departure date.
         This will use the DATE_RESOLVER_DIALOG."""
-        self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        #self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        self.chat_history["chat_request"] = step_context.context.activity.text
 
         booking_details = step_context.options
 
@@ -112,7 +115,8 @@ class BookingDialog(CancelAndHelpDialog):
     async def end_date_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for departure date.
         This will use the DATE_RESOLVER_DIALOG."""
-        self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        #self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        self.chat_history["chat_request"] = step_context.context.activity.text
 
         booking_details = step_context.options
 
@@ -128,7 +132,8 @@ class BookingDialog(CancelAndHelpDialog):
     # ==== Budget ==== # 
     async def budget_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for budget."""
-        self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        #self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        self.chat_history["chat_request"] = step_context.context.activity.text
 
         booking_details = step_context.options
 
@@ -146,7 +151,8 @@ class BookingDialog(CancelAndHelpDialog):
     # ==== Confirm ==== # 
     async def confirm_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Confirm the information the user has provided."""
-        self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        #self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        self.chat_history["chat_request"] = step_context.context.activity.text
 
         booking_details = step_context.options
 
@@ -158,16 +164,25 @@ class BookingDialog(CancelAndHelpDialog):
             f" depature date on : { booking_details.start_date } to the: { booking_details.end_date}"
             f" and for a budget of : { booking_details.budget }."
         )
+        prompt_message = MessageFactory.text(
+            msg, msg, InputHints.expecting_input
+        )
 
+        # Offer a YES/NO prompt.
+        return await step_context.prompt(
+            ConfirmPrompt.__name__, PromptOptions(prompt=prompt_message)
+        )
+        '''
         # YES/NO prompt.
         return await step_context.prompt(
             ConfirmPrompt.__name__, PromptOptions(prompt=MessageFactory.text(msg))
         )
-    
+        '''
     # ==== Final ==== #
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Complete the interaction, track data, and end the dialog."""
-        self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        #self.chat_history["chat_request"] = step_context._turn_context.activity.text
+        self.chat_history["chat_request"] = step_context.context.activity.text
 
         # Create data to track in App Insights
         booking_details = step_context.options
@@ -187,6 +202,7 @@ class BookingDialog(CancelAndHelpDialog):
             return await step_context.end_dialog(booking_details)
         
         # If Not OK
+        '''
         else:
             sorry_msg = "Sorry for not answering your wishes."
             prompt_sorry_msg = MessageFactory.text(sorry_msg, sorry_msg, InputHints.ignoring_input)
@@ -195,6 +211,10 @@ class BookingDialog(CancelAndHelpDialog):
             self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
 
             await step_context.context.send_activity(prompt_sorry_msg)
+        '''
+
+        self.telemetry_client.track_trace("NO answer", properties, "ERROR")
+        self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
 
         return await step_context.end_dialog()
 
