@@ -181,7 +181,7 @@ class BookingDialog(CancelAndHelpDialog):
             ConfirmPrompt.__name__,
             PromptOptions(
                 prompt=MessageFactory.text(
-                    msg, msg, input_hint=InputHints.ignoring_input
+                    msg, msg, input_hint=InputHints #.ignoring_input
                 )
             ),
         )
