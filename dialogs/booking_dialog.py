@@ -181,7 +181,7 @@ class BookingDialog(CancelAndHelpDialog):
             ConfirmPrompt.__name__,
             PromptOptions(
                 prompt=MessageFactory.text(
-                    msg, msg, input_hint=InputHints #.ignoring_input
+                    msg, msg, input_hint=InputHints.expecting_input #.ignoring_input
                 )
             ),
         )
@@ -190,7 +190,7 @@ class BookingDialog(CancelAndHelpDialog):
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Complete the interaction, track data, and end the dialog."""
         #self.chat_history["chat_request"] = step_context._turn_context.activity.text
-        #self.chat_history["chat_request"] = step_context.context.activity.text
+        self.chat_history["chat_request"] = step_context.context.activity.text
 
         # Create data to track in App Insights
         booking_details = step_context.options
