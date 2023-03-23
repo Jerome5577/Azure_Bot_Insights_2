@@ -176,6 +176,16 @@ class BookingDialog(CancelAndHelpDialog):
             f" and for a budget of : { booking_details.budget }."
         )
         
+        '''
+        prompt_message = MessageFactory.text(
+            msg, msg, InputHints.expecting_input
+        )
+
+        # Offer a YES/NO prompt.
+        return await step_context.prompt(
+            ConfirmPrompt.__name__, PromptOptions(prompt=prompt_message)
+        )
+        '''
         # Offer a YES/NO prompt.
         return await step_context.prompt(
             ConfirmPrompt.__name__,
