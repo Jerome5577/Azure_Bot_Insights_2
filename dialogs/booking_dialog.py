@@ -190,7 +190,7 @@ class BookingDialog(CancelAndHelpDialog):
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Complete the interaction, track data, and end the dialog."""
         #self.chat_history["chat_request"] = step_context._turn_context.activity.text
-        self.chat_history["chat_request"] = step_context.context.activity.text
+        #self.chat_history["chat_request"] = step_context.context.activity.text
 
         # Create data to track in App Insights
         booking_details = step_context.options
@@ -205,13 +205,13 @@ class BookingDialog(CancelAndHelpDialog):
         # If OK
         if step_context.result:
             # Track YES data
-            self.telemetry_client.track_trace("YES answer", properties,"VALID")
-            self.telemetry_client.track_trace("CHAT_HISTORY_VALID", self.chat_history, "VALID")
+            #self.telemetry_client.track_trace("YES answer", properties,"VALID")
+            #self.telemetry_client.track_trace("CHAT_HISTORY_VALID", self.chat_history, "VALID")
             return await step_context.end_dialog(booking_details)
         
         # If Not OK
-        self.telemetry_client.track_trace("NO answer", properties, "ERROR")
-        self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
+        #self.telemetry_client.track_trace("NO answer", properties, "ERROR")
+        #self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
         # Use properties in logging statements
         logger.warning('ERROR', extra=properties)
         logger.warning('CHAT_HISTORY_ERROR', extra=self.chat_history)
