@@ -55,10 +55,10 @@ INSTRUMENTATION_KEY = CONFIG.APPINSIGHTS_INSTRUMENTATION_KEY
 TELEMETRY_CLIENT = ApplicationInsightsTelemetryClient(
     INSTRUMENTATION_KEY, telemetry_processor=AiohttpTelemetryProcessor(), client_queue_size=10)
 # Code for enabling activity and personal information logging.
-#TELEMETRY_LOGGER_MIDDLEWARE = TelemetryLoggerMiddleware(
-#    telemetry_client=TELEMETRY_CLIENT, log_personal_information=False
-#)
-#ADAPTER.use(TELEMETRY_LOGGER_MIDDLEWARE)
+TELEMETRY_LOGGER_MIDDLEWARE = TelemetryLoggerMiddleware(
+    telemetry_client=TELEMETRY_CLIENT, log_personal_information=False
+)
+ADAPTER.use(TELEMETRY_LOGGER_MIDDLEWARE)
 
 
 # Create dialogs and Bot
