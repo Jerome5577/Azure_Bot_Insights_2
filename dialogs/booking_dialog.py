@@ -18,18 +18,15 @@ from .cancel_and_help_dialog import CancelAndHelpDialog
 from .start_date_resolver_dialog import StartDateResolverDialog
 from .end_date_resolver_dialog import EndDateResolverDialog
 
-
-'''
-
-#CONFIG = DefaultConfig()
+CONFIG = DefaultConfig()
 #INSTRUMENTATION_KEY = CONFIG.APPINSIGHTS_INSTRUMENTATION_KEY
 # AppInsights Logger 
 #name = __name__
 logger = logging.getLogger(__name__)
 logger.addHandler(AzureLogHandler(
-        connection_string="0d915ba4-8f0b-437c-a4a9-41807101e124")
+        connection_string='InstrumentationKey=0d915ba4-8f0b-437c-a4a9-41807101e124')
         )
-'''
+
 
 class BookingDialog(CancelAndHelpDialog):
     """Flight booking implementation."""
@@ -186,12 +183,7 @@ class BookingDialog(CancelAndHelpDialog):
         return await step_context.prompt(
             ConfirmPrompt.__name__, PromptOptions(prompt=prompt_message)
         )
-        '''
-        # YES/NO prompt.
-        return await step_context.prompt(
-            ConfirmPrompt.__name__, PromptOptions(prompt=MessageFactory.text(msg))
-        )
-        '''
+
     # ==== Final ==== #
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Complete the interaction, track data, and end the dialog."""
@@ -216,29 +208,19 @@ class BookingDialog(CancelAndHelpDialog):
             return await step_context.end_dialog(booking_details)
         
         # If Not OK
-        '''
-        else:
-            sorry_msg = "Sorry for not answering your wishes."
-            prompt_sorry_msg = MessageFactory.text(sorry_msg, sorry_msg, InputHints.ignoring_input)
 
-            self.telemetry_client.track_trace("NO answer", properties, "ERROR")
-            self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
-
-            await step_context.context.send_activity(prompt_sorry_msg)
-        '''
 
         self.telemetry_client.track_trace("NO answer", properties, "ERROR")
         self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
         # Use properties in logging statements
-        #logger.warning('ERROR', extra=properties)
-        #logger.warning('CHAT_HISTORY_ERROR', extra=self.chat_history)
+        logger.warning('ERROR', extra=properties)
+        logger.warning('CHAT_HISTORY_ERROR', extra=self.chat_history)
 
         return await step_context.end_dialog()
 
     
     # ==== Ambiguous date ==== #
     def is_ambiguous(self, timex: str) -> bool:
-        """Ensure time is correct."""
-        
+        """Ensure time is correct."""        
         timex_property = Timex(timex)
         return "definite" not in timex_property.types

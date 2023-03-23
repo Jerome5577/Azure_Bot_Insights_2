@@ -63,14 +63,14 @@ TELEMETRY_LOGGER_MIDDLEWARE = TelemetryLoggerMiddleware(
 ADAPTER.use(TELEMETRY_LOGGER_MIDDLEWARE)
 
 
-'''
+
 # AppInsights Logger 
 name = __name__
 logger = logging.getLogger(name)
 logger.addHandler(AzureLogHandler(
-        connection_string="0d915ba4-8f0b-437c-a4a9-41807101e124")
+        connection_string='InstrumentationKey=0d915ba4-8f0b-437c-a4a9-41807101e124')
         )
-'''
+
 
 # Create dialogs and Bot
 RECOGNIZER = FlightBookingRecognizer(CONFIG)
