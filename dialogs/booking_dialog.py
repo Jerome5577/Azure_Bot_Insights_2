@@ -216,14 +216,14 @@ class BookingDialog(CancelAndHelpDialog):
         # If OK
         if step_context.result:
             # Track YES data
-            #self.telemetry_client.track_trace("YES answer", properties,"VALID")
-            #self.telemetry_client.track_trace("CHAT_HISTORY_VALID", self.chat_history, "VALID")
+            self.telemetry_client.track_trace("YES answer", properties,"VALID")
+            self.telemetry_client.track_trace("CHAT_HISTORY_VALID", self.chat_history, "VALID")
             return await step_context.end_dialog(booking_details)
         
         # If Not OK
         else :
-            #self.telemetry_client.track_trace("NO answer", properties, "ERROR")
-            #self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
+            self.telemetry_client.track_trace("NO answer", properties, "ERROR")
+            self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
             # Use properties in logging statements
             logger.warning('ERROR', extra=properties)
             logger.warning('CHAT_HISTORY_ERROR', extra=self.chat_history)
