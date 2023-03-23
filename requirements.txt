@@ -12,8 +12,13 @@ azure-cognitiveservices-language-luis==0.2.0
 msrest ==0.6.10
 datatypes-date-time>=1.0.0.a1
 
+dateparser
+
 aiohttp~=3.7.4.post0
 
 pytest>=6.2.1
+
+opencensus
+opencensus-ext-azure
 
 

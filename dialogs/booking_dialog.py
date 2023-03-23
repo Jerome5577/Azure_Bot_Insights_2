@@ -1,21 +1,35 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 """Flight booking dialog."""
+import logging
+from opencensus.ext.azure.log_exporter import AzureLogHandler
 
 from datatypes_date_time.timex import Timex
 
-from botbuilder.core.bot_telemetry_client import Severity
+#from botbuilder.core.bot_telemetry_client import Severity
 
 from botbuilder.dialogs import WaterfallDialog, WaterfallStepContext, DialogTurnResult
 from botbuilder.dialogs.prompts import ConfirmPrompt, TextPrompt, PromptOptions
 from botbuilder.schema import InputHints
 from botbuilder.core import MessageFactory, BotTelemetryClient, NullTelemetryClient
-
+from bot_config import DefaultConfig
 from .cancel_and_help_dialog import CancelAndHelpDialog
 
 from .start_date_resolver_dialog import StartDateResolverDialog
 from .end_date_resolver_dialog import EndDateResolverDialog
 
+
+'''
+
+#CONFIG = DefaultConfig()
+#INSTRUMENTATION_KEY = CONFIG.APPINSIGHTS_INSTRUMENTATION_KEY
+# AppInsights Logger 
+#name = __name__
+logger = logging.getLogger(__name__)
+logger.addHandler(AzureLogHandler(
+        connection_string="0d915ba4-8f0b-437c-a4a9-41807101e124")
+        )
+'''
 
 class BookingDialog(CancelAndHelpDialog):
     """Flight booking implementation."""
@@ -215,6 +229,9 @@ class BookingDialog(CancelAndHelpDialog):
 
         self.telemetry_client.track_trace("NO answer", properties, "ERROR")
         self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
+        # Use properties in logging statements
+        #logger.warning('ERROR', extra=properties)
+        #logger.warning('CHAT_HISTORY_ERROR', extra=self.chat_history)
 
         return await step_context.end_dialog()
 

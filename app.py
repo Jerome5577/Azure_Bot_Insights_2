@@ -8,6 +8,7 @@ This sample shows how to create a bot that demonstrates the following:
 - Handle user interruptions for such things as `Help` or `Cancel`.
 - Prompt for and validate requests for information from the user.
 """
+import logging
 from http import HTTPStatus
 
 from aiohttp import web
@@ -25,12 +26,13 @@ from botbuilder.integration.applicationinsights.aiohttp import (
     AiohttpTelemetryProcessor,
     bot_telemetry_middleware)
 
+from opencensus.ext.azure.log_exporter import AzureLogHandler
+from adapter_with_error_handler import AdapterWithErrorHandler
+from flight_booking_recognizer import FlightBookingRecognizer
+
 from bot_config import DefaultConfig
 from dialogs import MainDialog, BookingDialog
 from bots import DialogAndWelcomeBot
-
-from adapter_with_error_handler import AdapterWithErrorHandler
-from flight_booking_recognizer import FlightBookingRecognizer
 
 CONFIG = DefaultConfig()
 
@@ -60,6 +62,15 @@ TELEMETRY_LOGGER_MIDDLEWARE = TelemetryLoggerMiddleware(
 )
 ADAPTER.use(TELEMETRY_LOGGER_MIDDLEWARE)
 
+
+'''
+# AppInsights Logger 
+name = __name__
+logger = logging.getLogger(name)
+logger.addHandler(AzureLogHandler(
+        connection_string="0d915ba4-8f0b-437c-a4a9-41807101e124")
+        )
+'''
 
 # Create dialogs and Bot
 RECOGNIZER = FlightBookingRecognizer(CONFIG)
