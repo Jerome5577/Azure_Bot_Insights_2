@@ -228,7 +228,7 @@ class BookingDialog(CancelAndHelpDialog):
             logger.warning('ERROR', extra=properties)
             logger.warning('CHAT_HISTORY_ERROR', extra=self.chat_history)
 
-            return await step_context.end_dialog()
+            return await step_context.end_dialog(None)
 
     
     # ==== Ambiguous date ==== #
