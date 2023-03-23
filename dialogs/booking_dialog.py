@@ -174,29 +174,13 @@ class BookingDialog(CancelAndHelpDialog):
             f"Please confirm, your travel from : { booking_details.origin } to: { booking_details.destination }"
             f" depature date on : { booking_details.start_date } to the: { booking_details.end_date}"
             f" and for a budget of : { booking_details.budget }."
-        )
-        
-               
-        prompt_message = MessageFactory.text(
-            msg, msg, InputHints.expecting_input
-        )
+        )       
+        prompt_message = MessageFactory.text(msg, msg, InputHints.expecting_input)
 
         # Offer a YES/NO prompt.
         return await step_context.prompt(
-            ConfirmPrompt.__name__, PromptOptions(prompt=prompt_message)
-        )
+            ConfirmPrompt.__name__, PromptOptions(prompt=prompt_message))
     
-        '''
-        # Offer a YES/NO prompt.
-        return await step_context.prompt(
-            ConfirmPrompt.__name__,
-            PromptOptions(
-                prompt=MessageFactory.text(
-                    msg, msg, input_hint=InputHints.expecting_input #.ignoring_input
-                )
-            ),
-        )
-        '''
     # ==== Final ==== #
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Complete the interaction, track data, and end the dialog."""
@@ -222,6 +206,9 @@ class BookingDialog(CancelAndHelpDialog):
         
         # If Not OK
         else :
+            sorry_msg = "Sorry for not helping you"
+            prompt_sorry_msg = MessageFactory.text(sorry_msg, sorry_msg, InputHints.ignoring_input)
+            await step_context.context.send_activity(prompt_sorry_msg)            
             self.telemetry_client.track_trace("NO answer", properties, "ERROR")
             self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
             # Use properties in logging statements
