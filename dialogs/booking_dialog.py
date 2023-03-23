@@ -178,7 +178,12 @@ class BookingDialog(CancelAndHelpDialog):
         
         # Offer a YES/NO prompt.
         return await step_context.prompt(
-            ConfirmPrompt.__name__, PromptOptions(prompt=MessageFactory.text(msg))
+            ConfirmPrompt.__name__,
+            PromptOptions(
+                prompt=MessageFactory.text(
+                    msg, msg, input_hint=InputHints.ignoring_input
+                )
+            ),
         )
 
     # ==== Final ==== #
@@ -205,8 +210,6 @@ class BookingDialog(CancelAndHelpDialog):
             return await step_context.end_dialog(booking_details)
         
         # If Not OK
-
-
         self.telemetry_client.track_trace("NO answer", properties, "ERROR")
         self.telemetry_client.track_trace("CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
         # Use properties in logging statements
