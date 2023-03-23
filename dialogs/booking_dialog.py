@@ -175,13 +175,10 @@ class BookingDialog(CancelAndHelpDialog):
             f" depature date on : { booking_details.start_date } to the: { booking_details.end_date}"
             f" and for a budget of : { booking_details.budget }."
         )
-        prompt_message = MessageFactory.text(
-            msg, msg, InputHints.expecting_input
-        )
-
+        
         # Offer a YES/NO prompt.
         return await step_context.prompt(
-            ConfirmPrompt.__name__, PromptOptions(prompt=prompt_message)
+            ConfirmPrompt.__name__, PromptOptions(prompt=MessageFactory.text(msg))
         )
 
     # ==== Final ==== #
