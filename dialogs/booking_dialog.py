@@ -188,6 +188,7 @@ class BookingDialog(CancelAndHelpDialog):
         # Create data to track in App Insights
         booking_details = step_context.options
         properties = {}
+        properties['chat_request'] = step_context.context.activity.text
         properties["origin"] = booking_details.origin
         properties["destination"] = booking_details.destination
         properties["departure_date"] = booking_details.start_date
@@ -198,6 +199,9 @@ class BookingDialog(CancelAndHelpDialog):
             # Track YES data
             self.telemetry_client.track_trace("YES answer", properties, "VALID")
             self.telemetry_client.track_trace("CHAT_HISTORY_VALID", self.chat_history, "VALID")
+            # Use properties in logging statements
+            logger.warning('VALID', extra=properties)
+            logger.warning('CHAT_HISTORY_VALID', extra=self.chat_history)
             return await step_context.end_dialog(booking_details)
         # If Not OK
         else:
