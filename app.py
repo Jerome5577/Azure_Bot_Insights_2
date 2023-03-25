@@ -62,8 +62,6 @@ TELEMETRY_LOGGER_MIDDLEWARE = TelemetryLoggerMiddleware(
 )
 ADAPTER.use(TELEMETRY_LOGGER_MIDDLEWARE)
 
-
-
 # AppInsights Logger 
 name = __name__
 logger = logging.getLogger(name)
