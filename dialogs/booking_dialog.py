@@ -197,8 +197,8 @@ class BookingDialog(CancelAndHelpDialog):
         # If OK
         if step_context.result:
             # Track YES data
-            self.telemetry_client.track_trace("telemetry_YES answer", properties, "VALID")
-            self.telemetry_client.track_trace("telemetry_CHAT_HISTORY_VALID", self.chat_history, "VALID")
+            self.telemetry_client.track_trace("telemetry_YES answer", properties, "telemetry_VALID")
+            self.telemetry_client.track_trace("telemetry_CHAT_HISTORY_VALID", self.chat_history, "telemetry_CHAT_HISTORY_VALID")
             # Use properties in logging statements
             logger.warning('opencensus_logger_VALID', extra=properties)
             logger.warning('opencensus_logger_CHAT_HISTORY_VALID', extra=self.chat_history)
@@ -208,8 +208,8 @@ class BookingDialog(CancelAndHelpDialog):
             sorry_msg = "Sorry for not helping you"
             prompt_sorry_msg = MessageFactory.text(sorry_msg, sorry_msg, InputHints.ignoring_input)
             await step_context.context.send_activity(prompt_sorry_msg)
-            self.telemetry_client.track_trace("telemetry_NO answer", properties, "ERROR")
-            self.telemetry_client.track_trace("telemetry_CHAT_HISTORY_ERROR", self.chat_history, "ERROR")
+            self.telemetry_client.track_trace("telemetry_NO answer", properties, "telemetry_ERROR")
+            self.telemetry_client.track_trace("telemetry_CHAT_HISTORY_ERROR", self.chat_history, "telemetry_CHAT_HISTORY_ERROR")
             # Use properties in logging statements
             logger.warning('opencensus_logger_ERROR', extra=properties)
             logger.warning('opencensus_logger_CHAT_HISTORY_ERROR', extra=self.chat_history)
