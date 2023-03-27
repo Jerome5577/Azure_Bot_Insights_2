@@ -184,6 +184,7 @@ class BookingDialog(CancelAndHelpDialog):
         # Create data to track in App Insights
         booking_details = step_context.options
         properties = {}
+        properties["chat_initial_request"] = self.chat_history["chat_initial_request"]
         properties["origin"] = booking_details.origin
         properties["destination"] = booking_details.destination
         properties["departure_date"] = booking_details.start_date
@@ -208,7 +209,7 @@ class BookingDialog(CancelAndHelpDialog):
             # Use properties in logging statements
             #logger.warning('opencensus_logger_ERROR', extra=self.chat_history)
             logger.warning('opencensus_logger_CHAT_HISTORY_ERROR', extra=self.chat_history)
-            logger.error(self.chat_history)
+            logger.error(properties)
 
         return await step_context.end_dialog(None)
 
