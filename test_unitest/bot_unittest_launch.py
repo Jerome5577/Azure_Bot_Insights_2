@@ -1,12 +1,10 @@
 import unittest
 import bot_unittest_3b
 
-
 '''
 suite = unittest.TestLoader().loadTestsFromModule(bot_unittest_3b)
 unittest.TextTestRunner().run(suite)
 '''
-
 
 from bot_unittest_3b import Test_Bot_Activities_Test1, Test_Bot_Activities_Test2, Test_Bot_Activities_Test3, Test_Bot_Activities_Test4
 

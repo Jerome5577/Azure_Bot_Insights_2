@@ -73,7 +73,6 @@ class BookingDialog(CancelAndHelpDialog):
     # ==== Origine ==== #
     async def origin_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for origin city."""
-        # self.chat_history["chat_request"] = step_context._turn_context.activity.text
         self.chat_history["chat_request"] = step_context.context.activity.text
 
         booking_details = step_context.options
@@ -91,8 +90,7 @@ class BookingDialog(CancelAndHelpDialog):
 
     async def destination_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for destination city."""
-        # self.chat_history["chat_request"] = step_context._turn_context.activity.text
-        self.chat_history["chat_request"] = step_context.context.activity.text
+        self.chat_history["chat_origin"] = step_context.context.activity.text
 
         booking_details = step_context.options
 
@@ -112,9 +110,8 @@ class BookingDialog(CancelAndHelpDialog):
     async def start_date_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for departure date.
         This will use the DATE_RESOLVER_DIALOG."""
-        # self.chat_history["chat_request"] = step_context._turn_context.activity.text
-        self.chat_history["chat_request"] = step_context.context.activity.text
-
+        self.chat_history["chat_destination"] = step_context.context.activity.text
+        
         booking_details = step_context.options
 
         # Capture the response to the previous step's prompt
@@ -130,8 +127,7 @@ class BookingDialog(CancelAndHelpDialog):
     async def end_date_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for departure date.
         This will use the DATE_RESOLVER_DIALOG."""
-        # self.chat_history["chat_request"] = step_context._turn_context.activity.text
-        self.chat_history["chat_request"] = step_context.context.activity.text
+        self.chat_history["chat_departure_date"] = step_context.context.activity.text
 
         booking_details = step_context.options
 
@@ -147,8 +143,8 @@ class BookingDialog(CancelAndHelpDialog):
 
     async def budget_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for budget."""
-        # self.chat_history["chat_request"] = step_context._turn_context.activity.text
-        self.chat_history["chat_request"] = step_context.context.activity.text
+        self.chat_history["chat_end_date"] = step_context.context.activity.text
+        
 
         booking_details = step_context.options
 
@@ -167,8 +163,8 @@ class BookingDialog(CancelAndHelpDialog):
 
     async def confirm_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Confirm the information the user has provided."""
-        # self.chat_history["chat_request"] = step_context._turn_context.activity.text
-        self.chat_history["chat_request"] = step_context.context.activity.text
+        self.chat_history["chat_budget"] = step_context.context.activity.text
+
         booking_details = step_context.options
         # Capture the results of the previous step's prompt
         booking_details.budget = step_context.result
@@ -183,12 +179,11 @@ class BookingDialog(CancelAndHelpDialog):
     # ==== Final ==== #
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Complete the interaction, track data, and end the dialog."""
-        # self.chat_history["chat_request"] = step_context._turn_context.activity.text
-        self.chat_history["chat_request"] = step_context.context.activity.text
+        self.chat_history["chat_confirm"] = step_context.context.activity.text
+
         # Create data to track in App Insights
         booking_details = step_context.options
         properties = {}
-        properties['chat_request'] = step_context.context.activity.text
         properties["origin"] = booking_details.origin
         properties["destination"] = booking_details.destination
         properties["departure_date"] = booking_details.start_date
@@ -197,23 +192,23 @@ class BookingDialog(CancelAndHelpDialog):
         # If OK
         if step_context.result:
             # Track YES data
-            self.telemetry_client.track_trace("telemetry_YES answer", properties, "telemetry_VALID")
-            self.telemetry_client.track_trace("telemetry_CHAT_HISTORY_VALID", self.chat_history, "telemetry_CHAT_HISTORY_VALID")
+            #self.telemetry_client.track_trace("telemetry_YES answer", properties, "telemetry_VALID")
+            #self.telemetry_client.track_trace("telemetry_CHAT_HISTORY_VALID", self.chat_history, "telemetry_CHAT_HISTORY_VALID")
             # Use properties in logging statements
-            logger.warning('opencensus_logger_VALID', extra=properties)
-            logger.warning('opencensus_logger_CHAT_HISTORY_VALID', extra=self.chat_history)
+            #logger.warning('opencensus_logger_VALID', extra=properties)
+            #logger.warning('opencensus_logger_CHAT_HISTORY_VALID', extra=self.chat_history)
             return await step_context.end_dialog(booking_details)
         # If Not OK
         else:
             sorry_msg = "Sorry for not helping you"
             prompt_sorry_msg = MessageFactory.text(sorry_msg, sorry_msg, InputHints.ignoring_input)
             await step_context.context.send_activity(prompt_sorry_msg)
-            self.telemetry_client.track_trace("telemetry_NO answer", properties, "telemetry_ERROR")
-            self.telemetry_client.track_trace("telemetry_CHAT_HISTORY_ERROR", self.chat_history, "telemetry_CHAT_HISTORY_ERROR")
+            #self.telemetry_client.track_trace("telemetry_NO answer", properties, "telemetry_ERROR")
+            #self.telemetry_client.track_trace("telemetry_CHAT_HISTORY_ERROR", properties, "telemetry_CHAT_HISTORY_ERROR")
             # Use properties in logging statements
-            logger.warning('opencensus_logger_ERROR', extra=properties)
+            #logger.warning('opencensus_logger_ERROR', extra=self.chat_history)
             logger.warning('opencensus_logger_CHAT_HISTORY_ERROR', extra=self.chat_history)
-            logger.error(properties)
+            logger.error(self.chat_history)
 
             return await step_context.end_dialog(None)
 
