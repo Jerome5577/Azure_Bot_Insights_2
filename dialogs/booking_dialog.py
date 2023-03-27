@@ -210,7 +210,7 @@ class BookingDialog(CancelAndHelpDialog):
             logger.warning('opencensus_logger_CHAT_HISTORY_ERROR', extra=self.chat_history)
             logger.error(self.chat_history)
 
-        return await step_context.end_dialog(None)
+        return await step_context.end_dialog()
 
     # ==== Ambiguous date ==== #
 
