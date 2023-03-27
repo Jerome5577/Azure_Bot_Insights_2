@@ -156,7 +156,7 @@ class BookingDialog(CancelAndHelpDialog):
         booking_details.end_date = step_context.result
 
         if booking_details.budget is None:
-            msg = "I didn;t notice information for the budget, can you tell me ?"
+            msg = "I didn't notice information for the budget, can you tell me ?"
             prompt_message = MessageFactory.text(
                 msg, msg, InputHints.expecting_input)
             return await step_context.prompt(TextPrompt.__name__, PromptOptions(prompt=prompt_message))  # pylint: disable=line-too-long,bad-continuation
@@ -214,7 +214,8 @@ class BookingDialog(CancelAndHelpDialog):
             logger.warning('opencensus_logger_ERROR', extra=properties)
             logger.warning('opencensus_logger_CHAT_HISTORY_ERROR', extra=self.chat_history)
             logger.error(properties)
-        return await step_context.end_dialog()
+
+        return await step_context.end_dialog(None)
 
     # ==== Ambiguous date ==== #
 
