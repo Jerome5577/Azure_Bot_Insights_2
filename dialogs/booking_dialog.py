@@ -73,7 +73,7 @@ class BookingDialog(CancelAndHelpDialog):
     # ==== Origine ==== #
     async def origin_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Prompt for origin city."""
-        self.chat_history["chat_request"] = step_context.context.activity.text
+        self.chat_history["chat_initial_request"] = step_context.context.activity.text
 
         booking_details = step_context.options
         print('booking_details : ', booking_details)
@@ -210,7 +210,7 @@ class BookingDialog(CancelAndHelpDialog):
             logger.warning('opencensus_logger_CHAT_HISTORY_ERROR', extra=self.chat_history)
             logger.error(self.chat_history)
 
-            return await step_context.end_dialog(None)
+        return await step_context.end_dialog(None)
 
     # ==== Ambiguous date ==== #
 
