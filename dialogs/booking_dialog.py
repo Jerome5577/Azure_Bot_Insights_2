@@ -208,8 +208,8 @@ class BookingDialog(CancelAndHelpDialog):
             #self.telemetry_client.track_trace("telemetry_CHAT_HISTORY_ERROR", properties, "telemetry_CHAT_HISTORY_ERROR")
             # Use properties in logging statements
             #logger.warning('opencensus_logger_ERROR', extra=self.chat_history)
-            logger.warning('opencensus_logger_CHAT_HISTORY_ERROR', extra=self.chat_history)
-            logger.error(properties)
+            logger.warning('opencensus_logger_CHAT_HISTORY_ERROR', extra=properties )
+            #logger.error(self.chat_history)
 
         return await step_context.end_dialog(None)
 
