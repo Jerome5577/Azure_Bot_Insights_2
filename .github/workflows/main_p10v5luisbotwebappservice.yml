@@ -61,3 +61,6 @@ jobs:
           app-name: 'p10v5luisbotwebappservice'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4E3004254F9348B380BFCB0605D9925D }}
+          
+      - name: 'Test unitaires'
+        run: python test_unitest/bot_unittest_launch.py
